@@ -14,7 +14,7 @@ import Data.Ratio
 import Control.Applicative
 import Control.Monad.State
 import qualified Data.Numbers.Primes as Primes -- cabal install primes
-import qualified Data.Permute as Permute -- cabal install permutation
+import qualified Data.Permute as Permute       -- cabal install permutation
 import qualified Data.Vector as Vec
 import qualified Data.Array.IArray as A
 import Control.DeepSeq
@@ -89,9 +89,6 @@ explodeInt10 = map (fromIntegral . digitToInt) . show
 implodeInt :: (Integral a) => a -> [a] -> a
 implodeInt base = foldl' (\acc x -> base*acc + x) 0
 {-# INLINE implodeInt #-}
--- Museum:
--- 1. implodeInt base ns = sum' $ zipWith (*) (reverse ns) exponents
---          where exponents = map (base^) [0..]
 
 
 -- Fibonacci numbers
@@ -267,14 +264,6 @@ euler 7 = Just $ Primes.primes !! (10001-1) -- Lists start counting at 0
 -}
 euler 8 = Just $ largestProduct 5 . explodeInt10 $ P8.n
       where largestProduct n = maximum . map product' . transpose . take n . tails
--- Old solution for the museum of learning Haskell:
--- euler 8 = Just $ largestProduct 5 . explodeInt10 $ P8.n
---       where
---             -- Finds the largest product of `len` consecutive list elements in a list
---             largestProduct _ [] = 1
---             largestProduct len xx@(_:xs)
---                   | length xx <= len = product xx
---                   | otherwise = max (product $ take len xs) (largestProduct len xs)
 
 
 
@@ -293,10 +282,6 @@ euler 9 = listToMaybe $ do
       let a = 1000 - b - c
       guard $ a^2 + b^2 == c^2
       return $ a*b*c
--- Museum
--- 1. The guard used to be 'guard $ a <= b && b + c < 1000 && a^2 + b^2 == c^2',
---    but the first two arguments can be dropped without (measurably) affecting
---    speed.
 
 
 
@@ -556,6 +541,8 @@ euler 18 = listToMaybe $ foldr1 rowReduce P18.triangle
             --    where p f=z (+) u$f l
             --          z=zipWith
 
+
+
 {-
       Problem 20
             Digit sum of 100!?
@@ -579,12 +566,12 @@ euler 20 = Just . digitSum 10 . faculty $ 100
             1.84 s
 -}
 euler 21 = Just . sum' . filter isAmicable $ [1..maxN]
-      where
-            maxN = 10^4
+      where maxN = 10^4
             d = sum' . properDivisors
             isAmicable n =
                   let dn = d n
                   in  dn <= maxN && dn /= n && d dn == n
+
 
 
 {-
@@ -644,6 +631,7 @@ euler 28 = Just $ sum' spiralList
             spiralList = scanl1 (+) spiralOffsets
 
 
+
 {-
       Problem 29
             How many distinct values of a^b for 2 <= a,b <= 100 are there?
@@ -655,6 +643,7 @@ euler 28 = Just $ sum' spiralList
 euler 29 = Just $ numDistinct powers
       where numDistinct = genericLength . group . sort
             powers = liftM2 (^) [2..100] [2..100]
+
 
 
 {-
@@ -687,6 +676,8 @@ euler 30 = Just . fromIntegral . sum' $ filter is5thPowerSum [2..325515]
             toTheFifth '7' = 7^5
             toTheFifth '8' = 8^5
             toTheFifth '9' = 9^5
+
+
 
 {-
       Problem 33
@@ -857,6 +848,7 @@ euler 41 = Just . fromIntegral . prevPanPrime $ Permute.listPermute 7 [6,5..0]
                         getNumber = implodeInt 10 . map (+1) . Permute.elems
 
 
+
 {-
       Problem 42
             Counting triangle words
@@ -898,8 +890,6 @@ euler 42 = Just . genericLength $ triangleWords
 euler 48 = Just . last10 $ sum' [n ^. n | n <- [1..1000]]
       where last10 x = x `rem` 10^10
             a ^. b = Power.power (\x y -> last10 $! x * y) b a
--- Naive implementation. Faster for nMax=1000, but scales very badly.
--- sum' [n^n | n <- [1..nMax]] `rem` 10^10
 
 
 
@@ -944,13 +934,6 @@ euler 53 = Just $ sum' $ do
                                   -- double" problem does not occur
       guard $ n `choose` k > 10^6
       return weight
--- Museum algorithm: straightforward implementation, calculates too many
--- binomials (doesn't use 'choose n k == choose n (n-k)')
---
--- euler 53 = Just $ genericLength [() | n <- [1..100],
---                                       k <- [2..n-1],
---                                       n `choose` k > 10^6
---                                       ]
 
 
 
@@ -1176,32 +1159,10 @@ euler 97 = Just . last10 $ 28433 * 2^.7830457 + 1
       Comment
             It is sufficient to compare the logs of the values, as log preserves
             order.
-            The solution below also calculates each log only once, contrary to
-            previous solutions (see museum code below).
 -}
 euler 99 = Just . fst . maxSnd . zip [1..] $ map log' P99.baseExpTuples
       where maxSnd = maximumBy . comparing $ snd
             log' ~(b, e) = fromIntegral e * log (fromIntegral b)
--- Museum time!
--- 1. Clumsy explicit comparison function. Insert in 3. for the full example.
--- where logCompare ~(_,(x,xExp)) ~(_,(y,yExp)) =
---             compare
---                   (fromIntegral xExp * log (fromIntegral x))
---                   (fromIntegral yExp * log (fromIntegral y))
--- 2. "Shorter comparison function, using Ord.comparing"
---    logCompare' = comparing (\(_, [x, xExp]) -> fromIntegral xExp * log (fromIntegral x))
--- 3. More complicated comparison procedure
--- euler 99 = Just . fst . maximumBy logCompare . zip [1..] $ P99.baseExpTuples
---       where -- Compares (_, (base, exponent)) values
---             logCompare ~(_,x) ~(_,y) = comparing log' x y
---             -- Logarithm of a number represented as a (base, exponent)
---             log' ~(b, e) = fromIntegral e * log (fromIntegral b)
--- 4. Calculating each log again for every comparison (although the optimizer
---    may have corrected that, not sure though)
--- euler 99 = Just . fst . logMax $ zip [1..] P99.baseExpTuples
---       where logMax = maximumBy . comparing $ log' . snd
---             log' ~(b, e) = fromIntegral e * log (fromIntegral b)
-
 
 
 
