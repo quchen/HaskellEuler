@@ -37,13 +37,16 @@ euler :: Int -> Maybe Integer
 -- All performance is measured in GHCi, i.e. without optimization.
 
 -- | Integer square root
+--   TODO: Do trial re-multiplication to get rid of intermediate double rounding
+--         errors
 iSqrt :: (Integral a) => a -> a
 iSqrt = floor . sqrt . fromIntegral
 {-# INLINE iSqrt #-}
 
--- | Divisibility test
+-- | Divisibility test.
+--   Defined in terms of `rem` for speed, so be careful with negative numbers.
 divisibleBy :: Integral a => a -> a -> Bool
-a `divisibleBy` b = a `mod` b == 0
+a `divisibleBy` b = a `rem` b == 0
 {-# INLINE divisibleBy #-}
 
 -- | List of all divisors, i.e. proper divisors plus the number itself
@@ -94,7 +97,7 @@ implodeInt base = foldl' (\acc x -> base*acc + x) 0
 -- Fibonacci numbers
 fibo :: [Integer]
 fibo = 1 : 1 : zipWith (+) fibo (tail fibo)
-{-# NOINLINE fibo #-} -- Probably unnecessary, GHC is quite smart and
+{-# NOINLINE fibo #-}
 
 -- | Faculty function
 faculty :: (Enum a, Num a) => a -> a
@@ -136,10 +139,12 @@ maximum' = foldl1' max
 -- | Strict product
 product' :: Num a => [a] -> a
 product' = foldl' (*) 1
+{-# INLINE product' #-}
 
 -- | Strict sum
 sum' :: Num a => [a] -> a
 sum' = foldl' (+) 0
+{-# INLINE sum' #-}
 
 
 
@@ -158,10 +163,6 @@ euler 1 = Just $ (sumFor 3 + sumFor 5 - sumFor 15) `quot` 2
       where nMax = 1000 - 1
             sumFor n = let nX = nMax `quot` n
                        in  n * nX * (nX + 1)
--- Old implementation
--- euler 1 = Just $ return $ sum [0,3..999] + sum [0,5..999]
--- Even older implementation
--- euler 1 = Just $ return $ sum [n | n <- [1..999], n `divisibleBy` 5 || n `divisibleBy` 3]
 
 
 
@@ -187,6 +188,7 @@ euler 2 = Just $  sum' . filter even $ takeWhile (<= 4 * 10^6) fibo
 euler 3 = Just $ last . Primes.primeFactors $ 600851475143
 
 
+
 {-
       Problem 4
             A palindromic number reads the same both ways. The largest palindrome made from the product of two 2-digit numbers is 9009 = 91 ? 99.
@@ -198,7 +200,6 @@ euler 3 = Just $ last . Primes.primeFactors $ 600851475143
 euler 4 = Just $ maximum' [i*j | i <- [1..999], j <- [1..i], isPalindromic  (i*j)]
       where isPalindromic n = let showNumber = show n
                               in  showNumber == reverse showNumber
-
 
 
 
@@ -229,14 +230,6 @@ euler 5 = Just $ foldl1' lcm' [1..20]
       Result
             25164150
             .00 s
-
-      Alternative solution:
-            The brute force formula, which when simplified yields the solution
-            below, is
-                  result = squareSum - sumSquares
-                  squareSum  = ((^2) . sum) range
-                  sumSquares = (sum . map (^2)) range
-                  range = [1..100]
 -}
 euler 6 = Just $ (n-1) * n * (1+n) * (2+3*n) `div` 12
       where n = 100
@@ -361,8 +354,8 @@ euler 12 = listToMaybe [triangle n | n <- [1..], triangleD n > 500]
             .01 s
 -}
 euler 13 = Just . first10 . sum' $ P13.numbers
-      where first10 n | n < 10^10 = n -- first number with 11 digits is 10^10
-                      | otherwise  = first10 $ n `quot` 10
+      where first10 !n | n < 10^10 = n -- first number with 11 digits is 10^10
+                       | otherwise  = first10 $ n `quot` 10
 
 
 {-
@@ -403,34 +396,6 @@ euler 14 = Just $ fst maxTuple
                   where maxC a@(_,!a2) x@(_,x2)
                               | a2 >= x2  = a
                               | otherwise = x
-
--- Old algorithm, using no memoization. Performance: 228 s (GHCi), 1.3 s (GHC).
---
--- euler 14 = Just $ return . fromIntegral . snd . maxTuple $ [1..10^6-1]
---    where
-
---          collatzLength :: Word32 -> Word16
---          collatzLength n = go (1, n)
---                where
---                      -- 'go (1, n)' calculates the length of the collatz chain
---                      -- starting at n.
---                      go :: (Word16, Word32) -> Word16
---                      go (!c, !n) -- c = current count so far, n = current number
---                            | n == 1    = c
---                            | even n    = go (c + 1, n `div` 2)
---                            | otherwise = go (c + 1, 3 * n + 1)
-
---          -- 'collatzMax prev candid' returns the tuple with the longer chain,
---          -- which is either the unmodified old tuple, or the one generated
---          -- out of the starting value provided as the second argument.
---          collatzMax :: (Word16, Word32) -> Word32 -> (Word16, Word32)
---          collatzMax previous candidate =
---                max previous (collatzLength candidate, candidate)
-
---          -- The accumulator is of the form '(length, start_value)' of the
---          -- maximum entry so far.
---          maxTuple :: [Word32] -> (Word16, Word32)
---          maxTuple = foldl collatzMax (1, 1)
 
 
 
@@ -945,17 +910,17 @@ euler 53 = Just $ sum' $ do
       Result
             1.8 s
 -}
-euler 56 = Just . maximum' . map (digitSum 10) $ [a^b | a <- [1..100], b <- [1..100]]
+euler 56 = Just . maximum' . map (digitSum 10) $ liftM2 (^) [1..100] [1..100]
 
 
 
 {-
       Problem 59
             Decrypt an English text ciphered using a XOR'd key
-to put one's foot in one's mouth
+
       Result
             107359
-            0.05 s s
+            0.05 s
 
       Comment:
             Initialy, I solved this by checking how many times the most common
