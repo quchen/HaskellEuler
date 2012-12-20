@@ -1,4 +1,25 @@
+{-
+      Problem 99
+            Comparing large numbers of the form base^exponent
+
+      Result
+            709
+            0.04 s
+
+      Comment
+            It is sufficient to compare the logs of the values, as log preserves
+            order.
+-}
 module Problem99 where
+
+import Data.Ord
+import Data.List
+
+solution = fst . maxSnd . zip [1..] $ map log' baseExpTuples
+
+maxSnd = maximumBy . comparing $ snd
+
+log' ~(b, e) = fromIntegral e * log (fromIntegral b)
 
 baseExpTuples = [
 	(519432,525806),

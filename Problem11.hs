@@ -1,4 +1,29 @@
-module Problem11 where
+{-
+      Problem 11
+            Find the greatest product of adjacent numbers in a grid
+
+      Result
+            70600674
+            0.02 s
+-}
+module Problem11 (solution) where
+
+import Data.List
+import CommonFunctions
+
+solution = maximum' . map maxProduct $ horizontal ++ vertical ++ diag1 ++ diag2
+      where
+            -- max product of 4 consecutive numbers in a list
+            maxProduct = maximum' . map (product' . take 4) . tails
+            rotateList _ [] = []
+            rotateList n xs -- Example: rotateList (-1) [1..4] == [4,1,2,3]
+                  | n == 0 = xs
+                  | n >  0 = rotateList (n-1) $  tail xs  ++ [head xs]
+                  | n <  0 = rotateList (n+1) $ [last xs] ++  init xs
+            horizontal = grid
+            vertical   = transpose horizontal
+            diag1      = transpose $ zipWith rotateList [1..]     horizontal
+            diag2      = transpose $ zipWith rotateList [-1,-2..] horizontal
 
 grid = [[08, 02, 22, 97, 38, 15, 00, 40, 00, 75, 04, 05, 07, 78, 52, 12, 50, 77, 91, 08],
         [49, 49, 99, 40, 17, 81, 18, 57, 60, 87, 17, 40, 98, 43, 69, 48, 04, 56, 62, 00],

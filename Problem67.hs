@@ -1,4 +1,16 @@
-module Problem67 where
+{-
+      Problem 18
+            Same as 18, but with larger data
+
+      Result
+            7273
+            .01 s
+-}
+module Problem67 (solution) where
+
+import Problem18 (reduceTriangle)
+
+solution = reduceTriangle triangle
 
 triangle = [
 	[59],
