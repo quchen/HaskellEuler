@@ -46,7 +46,8 @@ import Control.Applicative
      Note that this is implemented using 'powerM' and the 'Identity' monad.
      -}
 power :: (Integral i) => (a -> a -> a) -> i -> a -> a
-power f n x = runIdentity $ powerM (\a b -> Identity (f a b)) n x
+power f n = runIdentity . powerM (\a b -> Identity (f a b)) n
+{-# INLINE power #-}
 
 {- | Monadic version of 'power'.
 
@@ -56,9 +57,8 @@ power f n x = runIdentity $ powerM (\a b -> Identity (f a b)) n x
      then @getSum . snd . runWriter $ powerM 1 f n@.
      -}
 powerM :: (Integral i, Monad m) => (a -> a -> m a) -> i -> a -> m a
-powerM f n' x' = g n' x'
-      where
-            g n x
+powerM f = g
+      where g n x
                   | n <= 0    = error "Negative exponent" -- Same as 1^(-1)
                   | n == 1    = return x
                   | even n    = x `f` x >>= g (n `quot` 2)
@@ -69,6 +69,7 @@ powerM f n' x' = g n' x'
                   | otherwise = do square <- (x `f` x)
                                    rest   <- (r `f` x)
                                    h (pred n `quot` 2) rest square
+{-# INLINE powerM #-}
 
 
 
