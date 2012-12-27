@@ -6,7 +6,7 @@
             104743
             .04 s
 -}
-module Problem7 where
+module Problem7 (solution) where
 
 import Data.Numbers.Primes
 

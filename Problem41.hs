@@ -17,7 +17,7 @@
             prime because the problem gives 2143 as an example, which is a
             4-pandigital. The rest of the algorithm is brute force.
 -}
-module Problem41 where
+module Problem41 (solution) where
 
 import Data.Numbers.Primes
 import qualified Data.Permute as P

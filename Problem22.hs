@@ -6,7 +6,7 @@
             871198282
             .09 s
 -}
-module Problem22 where
+module Problem22 (solution) where
 
 import Data.Char
 import CommonFunctions
@@ -18,12 +18,12 @@ solution = nameListScore names
 -- The score consists of the position of the name in the sorted list
 -- (starting with 1) multiplied by the name score.
 -- Example: "ABD" at position 8 yields (1+2+4)*8 = 56.
-nameListScore :: (Enum a, Num a) => [String] -> a
+nameListScore :: (Integral a) => [String] -> a
 nameListScore names = sum' . zipWith (*) [1..] . map nameScore . sort $ names
 
 -- Calculates the name score of a single name.
 -- Example: "ABD" = 1+2+4 = 7
-nameScore :: (Num a) => String -> a
+nameScore :: (Integral a) => String -> a
 nameScore name = fromIntegral . sum' $ map (\x -> ord x - ord 'A' + 1) name
 
 

@@ -7,7 +7,7 @@
             31875000
             .58 s
 -}
-module Problem9 where
+module Problem9 (solution) where
 
 import Control.Monad
 

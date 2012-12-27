@@ -10,7 +10,7 @@
             Haskell provides a lcm function in the Prelude, but I re-implemented
             it so that the problem is less of a stub.
 -}
-module Problem5 where
+module Problem5 (solution) where
 
 import Data.List
 

@@ -10,7 +10,7 @@
             It is sufficient to compare the logs of the values, as log preserves
             order.
 -}
-module Problem99 where
+module Problem99 (solution) where
 
 import Data.Ord
 import Data.List

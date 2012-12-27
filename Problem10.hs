@@ -6,7 +6,7 @@
             142913828922
             0.55 s
 -}
-module Problem10 where
+module Problem10 (solution) where
 
 import CommonFunctions
 import Data.Numbers.Primes

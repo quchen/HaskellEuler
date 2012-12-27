@@ -15,7 +15,7 @@
                compared to using Data.Ratio. (Maybe because my mediant is
                strict?)
 -}
-module Problem73 where
+module Problem73 (solution) where
 
 
 solution = fromIntegral $ fareyCount 12000 (1,3) (1,2)

@@ -5,7 +5,7 @@
       Result
             .00 s
 -}
-module Problem2 where
+module Problem2 (solution) where
 
 import CommonFunctions
 

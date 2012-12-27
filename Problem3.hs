@@ -7,7 +7,7 @@
             6857
             .01 s
 -}
-module Problem3 where
+module Problem3 (solution) where
 
 import Data.Numbers.Primes
 

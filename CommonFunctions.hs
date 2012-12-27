@@ -7,8 +7,8 @@ module CommonFunctions where
 import Data.List
 import Control.Monad
 import Control.Applicative
-import Data.Char (digitToInt)
 import Data.Tuple (swap)
+import Power
 
 
 -- | Integer square root
@@ -59,7 +59,7 @@ explodeInt base = reverse . reverseExplodeInt base
 -- Specialized version of explodeInt, explodes with base 10. About a factor of
 -- 10 faster than the unspecialized version (how appropriate).
 explodeInt10 :: (Integral a, Show a) => a -> [a]
-explodeInt10 = map (fromIntegral . digitToInt) . show
+explodeInt10 = map (fromIntegral . digitToInt') . show
 
 
 -- Inverse of explodeInt.
@@ -71,8 +71,32 @@ implodeInt base = foldl' (\acc x -> base*acc + x) 0
 
 -- Fibonacci numbers
 fibo :: [Integer]
-fibo = 1 : 1 : zipWith (+) fibo (tail fibo)
+fibo = 1 : 1 : strict (zipWith (+) fibo (tail fibo))
+      where strict = takeWhile (`seq` True) -- Make reading this list strict
 {-# NOINLINE fibo #-}
+
+
+
+{- Fast Fibonacci algorithm. Calculates a single Fibonacci number in O(log(n)). -}
+
+-- nextFib multiplied with a vector (a, b) results in (a+b, a).
+-- Applying this matrix n times to (0,1) results in the tuple
+-- (fib (n+1), fib n).
+nextFib = ((1,1),(1,0))
+
+-- 2*2 matrix product
+matrixProd ((!m11,!m12), (!m21,!m22)) ((!n11,!n12), (!n21,!n22)) = r
+      where r = ((m11*n11 + m12*n21, m11*n12 + m12*n22),
+                 (m21*n11 + m22*n21, m21*n12 + m22*n22))
+-- 2*2 matrix times vector
+matrixTimes ((!m11,!m12), (!m21,!m22)) (a,b) = r
+      where r = (a*m11 + b*m12, a*m21 + b*m22)
+
+fib 0 = 0
+fib n = fst $ power matrixProd n nextFib `matrixTimes` (0,1)
+
+
+
 
 -- | Faculty function
 faculty :: (Enum a, Num a) => a -> a
@@ -120,3 +144,16 @@ product' = foldl' (*) 1
 sum' :: Num a => [a] -> a
 sum' = foldl' (+) 0
 {-# INLINE sum' #-}
+
+digitToInt' :: (Integral a) => Char -> a
+digitToInt' '0' = 0
+digitToInt' '1' = 1
+digitToInt' '2' = 2
+digitToInt' '3' = 3
+digitToInt' '4' = 4
+digitToInt' '5' = 5
+digitToInt' '6' = 6
+digitToInt' '7' = 7
+digitToInt' '8' = 8
+digitToInt' '9' = 9
+digitToInt'  _  = error $ "Custom digitToInt': Not a digit"

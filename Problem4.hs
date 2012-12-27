@@ -6,9 +6,10 @@
       Result
             .67 s
 -}
-module Problem4 where
+module Problem4 (solution) where
 
 import CommonFunctions (maximum')
+import Control.Monad (guard)
 
 solution = maximum' [i*j | i <- [1..999], j <- [1..i], isPalindromic  (i*j)]
       where isPalindromic n = let showNumber = show n

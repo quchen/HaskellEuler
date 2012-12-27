@@ -9,7 +9,7 @@
       Comment
             The formula below is based on sum [1..n] == n(n+1)/2.
 -}
-module Problem1 where
+module Problem1 (solution) where
 
 solution = (sumFor 3 + sumFor 5 - sumFor 15) `quot` 2
       where nMax = 1000 - 1

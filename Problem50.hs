@@ -23,10 +23,11 @@ solution = snd . maximumBy (comparing fst) $ primeSums
 
 pMax = 10^6
 
+-- Tails of list of primes below pMax
 primes' = tails $ takeWhile (< pMax) primes
 
 primeSums = concatMap (filterCrap . scanl ls (0,0)) primes'
       where ls (!l, !s) x = (l + 1, s + x) -- ls = length/sum
--- Stop summing if the sum becomes too large
 
-filterCrap = filter (isPrime . snd) . takeWhile (\x -> snd x < pMax)
+-- TakeWhile to stop summing if the sum becomes too large
+filterCrap = filter (isPrime . snd) . takeWhile ((< pMax) . snd)

@@ -7,7 +7,7 @@
             4782
             0.11 s
 -}
-module Problem25 where
+module Problem25 (solution) where
 
 import Data.List
 import CommonFunctions

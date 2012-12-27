@@ -3,7 +3,8 @@
             Numbers that can be written as factorials of their digits
 
       Result
-            54 s
+            40730
+            13 s
 
       Comment
             Similar estimate as in problem 30 results in a numerical upper
@@ -12,11 +13,12 @@
 module Problem34 (solution) where
 
 import CommonFunctions
+import Control.Applicative
 
 solution = fromIntegral . sum' $ filter isSumOfFacDigits [3..2309192]
 
 -- f x = can x be written as the sum of faculties of its digits?
-isSumOfFacDigits x = x == (sum' . map faculty' $ show x)
+isSumOfFacDigits = (==) <*> sum' . map faculty' . show
 
 -- This is even (much) faster than using a vector lookup table :-)
 faculty' '0' = 1

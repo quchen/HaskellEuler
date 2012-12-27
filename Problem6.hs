@@ -7,7 +7,7 @@
             25164150
             .00 s
 -}
-module Problem6 where
+module Problem6 (solution) where
 
 solution = (n-1) * n * (1+n) * (2+3*n) `div` 12
       where n = 100

@@ -12,6 +12,7 @@ import Control.Monad.Identity
 import Test.QuickCheck
 import Control.Applicative
 
+-- COMMENT OUTDATED: Arguments are now power f n x
 {- | Efficient power algorithm.
 
      > power x f n = x `f` x `f` x `f` ... (n times x)

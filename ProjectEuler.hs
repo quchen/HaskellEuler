@@ -95,6 +95,13 @@ euler 73 = Just Problem73.solution
 euler 79 = Just Problem79.solution
 euler 97 = Just Problem97.solution
 euler 99 = Just Problem99.solution
-euler _ = Nothing -- Problem hasn't been solved yet
+euler __ = Nothing -- Problem hasn't been solved yet
+
+
+
 
 -- == PLAYGROUND ==
+
+
+
+

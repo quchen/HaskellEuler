@@ -15,7 +15,7 @@ import CommonFunctions
 solution = sum' $ do
       n <- [23..100] -- By mathematical analysis, n = 23 is the first value for
                      -- which the binomial coefficient can exceed 10^6.
-      let nHalf = n `quot` 2 -- Ceiled half of n
+      let nHalf = n `quot` 2 -- Floored half of n
       k <- [2..nHalf]
       -- Use 'choose n k == choose n (n-k)' to count certain values twice
       -- instead of recomputing both instances separately:

@@ -6,7 +6,7 @@
             9183
             .94 s
 -}
-module Problem29 where
+module Problem29 (solution) where
 
 import Control.Monad
 import Data.List

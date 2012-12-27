@@ -9,7 +9,7 @@
             837799
             10 s
 -}
-module Problem14 where
+module Problem14 (solution) where
 
 import Data.Array
 

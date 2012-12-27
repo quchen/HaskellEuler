@@ -19,7 +19,7 @@
             of magnitude, and 10^5 took so long I aborted it. The truncation-
             based version still finished quickly.)
 -}
-module Problem48 where
+module Problem48 (solution) where
 
 import Power
 import CommonFunctions

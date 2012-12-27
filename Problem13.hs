@@ -1,5 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-
 {-
       Problem 13
             Work out the first ten digits of the sum of one-hundred 50-digit
@@ -15,8 +13,8 @@ import CommonFunctions
 
 solution = first10 . sum' $ numbers
 
-first10 !n | n < 10^10 = n -- first number with 11 digits is 10^10
-           | otherwise  = first10 $ n `quot` 10
+first10 n | n < 10^10 = n -- first number with 11 digits is 10^10
+          | otherwise  = first10 $ n `quot` 10
 
 
 

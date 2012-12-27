@@ -35,10 +35,8 @@ rowReduce upper lower = zipWith max lShifted rShifted
       where lShifted = zipWith (+) upper (init lower) -- init unnecessary, but makes the code nicely symmetric :-)
             rShifted = zipWith (+) upper (tail lower)
 -- -- Golfed version:
--- -- (Maybe some more spaces can be omitted)
--- rowReduce u l=z max (p id)$p tail
---    where p f=z (+) u$f l
---          z=zipWith
+-- rowReduce u l=let p f=z(+)u$f l;z=zipWith in z max(p id)$p tail
+
 
 
 

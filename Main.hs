@@ -1,3 +1,5 @@
+{-# LANGUAGE TupleSections #-}
+
 module Main where
 
 import ProjectEuler
@@ -9,7 +11,7 @@ import Text.Printf
 
 -- | Returns 'Just (number, result)' for solved problems, otherwise 'Nothing'
 solveEuler :: Int -> Maybe (Int, Integer)
-solveEuler n = fmap (\x -> (n, x)) $ euler n
+solveEuler n = fmap (n,) $ euler n
 
 main = do
       let results = mapMaybe solveEuler [1..10^2] `using` parList rseq

@@ -6,9 +6,11 @@
             210
             2.2 s
 -}
-module Problem40 where
+module Problem40 (solution) where
 
 import CommonFunctions
+import Control.Monad
+import Control.Monad.RWS
 
 solution = product' $ map (concatInts !!) d_n
       where

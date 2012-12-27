@@ -7,7 +7,7 @@
             76576500
             0.74 s
 -}
-module Problem12 where
+module Problem12 (solution) where
 
 import Data.List
 import Data.Numbers.Primes
@@ -20,9 +20,8 @@ solution = head [triangle n | n <- [1..], triangleD n > 500]
             -- fact that n and (n+1) are coprime, so the divisor count is a
             -- homomorphism on them.
             triangleD n
-                  | even n    = d (n `quot` 2) * d (n + 1) -- Make sure the even value ...
-                  | otherwise = d n * d ((n + 1) `quot` 2) -- ... is divided by 2
-            d = numDivisors
+                  | even n    = numDivisors (n `quot` 2) * numDivisors (n + 1)
+                  | otherwise = numDivisors n * numDivisors ((n + 1) `quot` 2)
 
             -- Number of divisors.
             -- Based on the fact that a number with prime factors of multi-

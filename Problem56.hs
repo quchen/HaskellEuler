@@ -7,7 +7,7 @@
             972
             1.8 s
 -}
-module Problem56 where
+module Problem56 (solution) where
 
 import CommonFunctions
 import Control.Monad

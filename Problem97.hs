@@ -21,5 +21,5 @@ solution = last10 $ 28433 * 2^.7830457 + 1
 
 last10 x = x `rem` 10^10
 
-infixl 8 ^.
-a ^. b = power (\x y -> last10 $! x * y) b a
+infixr 8 ^.
+b ^. e = power (\x y -> last10 $! x * y) e b

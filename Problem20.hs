@@ -6,7 +6,7 @@
             648
             0.00 s
 -}
-module Problem20 where
+module Problem20 (solution) where
 
 import CommonFunctions
 

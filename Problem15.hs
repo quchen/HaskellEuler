@@ -12,7 +12,7 @@
             ways are there to arrange right and down", which is simply the
             binomial coefficient.
 -}
-module Problem15 where
+module Problem15 (solution) where
 
 import CommonFunctions
 

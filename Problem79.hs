@@ -1,6 +1,6 @@
 {-
       Problem 99
-            Decyphering passwords attempty by topological sorting
+            Decyphering passwords by topological sorting
 
       Result
             73162890
@@ -38,8 +38,8 @@ topologicalSort g@(Graph v e)
             v' = delete x v -- Remove (first instance of) vertex
                             -- (This ensures cyclic graphs fail, as another
                             -- version of the vertex still remains in that case)
-            e' = filter (\(a,_) -> a /= x) e -- Remove all outgoing arrows
-                                             -- associated to a vertex
+            e' = filter ((/= x) . fst) e -- Remove all outgoing arrows
+                                         -- associated to the vertex x
 
 -- The code below converts the data into a graph of the format
 -- Graph [vertex, vertex, ...] [(out, in), (out, in), ...]
