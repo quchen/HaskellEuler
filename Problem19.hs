@@ -7,7 +7,7 @@
 
       Result
             171
-            .34 s
+            .06 s
 
       Comment
             This solution uses no built-in date functions, and relies only on
@@ -20,20 +20,6 @@ module Problem19 (solution) where
 
 import Text.Printf
 import Data.List (genericLength)
-
-data Weekday = Monday
-             | Tuesday
-             | Wednesday
-             | Thursday
-             | Friday
-             | Saturday
-             | Sunday
-             deriving (Show, Enum, Eq)
-
-addDayToWeekday :: Weekday -> Weekday
-addDayToWeekday Sunday = Monday -- Sunday needs special handling to loop properly
-addDayToWeekday d      = succ d
-
 
 
 data Date = Date !Int !Int !Int -- Year Month Day
@@ -54,23 +40,27 @@ isLeapYear y = y `rem` 4 == 0
                &&
                ((y `rem` 100 == 0) `implies` (y `rem` 400 == 0))
 
-addDayToDate :: Date -> Date
-addDayToDate date@(Date y m d) | isLastDayOfMonth date && m == 12 = Date (y+1) 1 1 -- Flip year
-                               | isLastDayOfMonth date            = Date y (m+1) 1 -- Flip month
-                               | otherwise                        = Date y m (d+1)
+add7Days :: Date -> Date
+add7Days date@(Date y m d) = Date y' m' d'
+      where dim = daysInMonth date
+            flipMonth = (d+7) > dim
+            flipYear  = flipMonth && m == 12
+            d' = constrain 1 dim (d+7)
+            m' = if flipMonth then constrain 1 12 (m+1) else m
+            y' = if flipYear then y+1 else y
 
-data WeekdayDate = WD Date Weekday
-instance Show WeekdayDate where
-      show (WD d w) = printf "%s (%s)" (show d) (show w)
+-- | Constrains values to be in [start,end] by modulo operation.
+--   Example: constrain 1 10 11 = 1, as 11 corresponds to 1 in the interval from
+--   1 to 10.
+constrain start end value | start > end = constrain end start value
+                          | otherwise = (value - start) `rem` (end - start + 1) + start
 
-addDay :: WeekdayDate -> WeekdayDate
-addDay (WD d w) = WD (addDayToDate d) (addDayToWeekday w)
+isFirst (Date _ _ 1) = True
+isFirst _            = False
 
-isFirstSunday (WD (Date _ _ 1) Sunday) = True
-isFirstSunday _                        = False
+solution = Just . genericLength . filter isFirst $ centuryDays
 
-solution = Just . genericLength . filter isFirstSunday $ centuryDays
-
-centuryDays = takeWhile (\ ~(WD d _) -> d <= Date 2000 12 31) .
-              dropWhile (\ ~(WD d _) -> d <  Date 1901  1  1) $
-              iterate addDay (WD (Date 1900 1 1) Monday)
+-- | All the days of the century in question
+centuryDays = takeWhile (<= Date 2000 12 31) .
+              dropWhile (<  Date 1901  1  1) $
+              iterate add7Days (Date 1900 1 7) -- 7th of Jan was the first Sunday
