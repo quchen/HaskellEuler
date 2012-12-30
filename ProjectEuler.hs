@@ -30,6 +30,7 @@ import qualified Problem25
 import qualified Problem28
 import qualified Problem29
 import qualified Problem30
+import qualified Problem31
 import qualified Problem33
 import qualified Problem34
 import qualified Problem35

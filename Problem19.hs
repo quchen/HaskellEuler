@@ -58,7 +58,7 @@ constrain start end value | start > end = constrain end start value
 isFirst (Date _ _ 1) = True
 isFirst _            = False
 
-solution = Just . genericLength . filter isFirst $ centuryDays
+solution = genericLength . filter isFirst $ centuryDays
 
 -- | All the days of the century in question
 centuryDays = takeWhile (<= Date 2000 12 31) .
