@@ -26,6 +26,7 @@ import qualified Problem19
 import qualified Problem20
 import qualified Problem21
 import qualified Problem22
+import qualified Problem24
 import qualified Problem25
 import qualified Problem28
 import qualified Problem29
@@ -75,6 +76,7 @@ euler 19 = Just Problem19.solution
 euler 20 = Just Problem20.solution
 euler 21 = Just Problem21.solution
 euler 22 = Just Problem22.solution
+euler 24 = Just Problem24.solution
 euler 25 = Just Problem25.solution
 euler 28 = Just Problem28.solution
 euler 29 = Just Problem29.solution
