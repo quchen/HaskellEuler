@@ -40,6 +40,7 @@ import qualified Problem37
 import qualified Problem40
 import qualified Problem41
 import qualified Problem42
+import qualified Problem43
 import qualified Problem48
 import qualified Problem50
 import qualified Problem53
@@ -90,6 +91,7 @@ euler 37 = Just Problem37.solution
 euler 40 = Just Problem40.solution
 euler 41 = Just Problem41.solution
 euler 42 = Just Problem42.solution
+euler 43 = Just Problem43.solution
 euler 48 = Just Problem48.solution
 euler 50 = Just Problem50.solution
 euler 53 = Just Problem53.solution

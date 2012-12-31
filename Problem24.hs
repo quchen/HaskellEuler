@@ -3,7 +3,8 @@
             What is the 10^6th permutation of 0123456789?
 
       Result
-            UNSOLVED
+            2783915460
+            4.42 s
 -}
 
 module Problem24 (solution) where
