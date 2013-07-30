@@ -10,7 +10,8 @@ module Problem29 (solution) where
 
 import Control.Monad
 import Data.List
+import CommonFunctions (length')
 
 solution = numDistinct powers
-      where numDistinct = genericLength . group . sort
+      where numDistinct = length' . group . sort
             powers = liftM2 (^) [2..100] [2..100]

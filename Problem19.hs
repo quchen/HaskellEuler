@@ -19,7 +19,7 @@
 module Problem19 (solution) where
 
 import Text.Printf
-import Data.List (genericLength)
+import CommonFunctions
 
 
 data Date = Date !Int !Int !Int -- Year Month Day
@@ -58,7 +58,7 @@ constrain start end value | start > end = constrain end start value
 isFirst (Date _ _ 1) = True
 isFirst _            = False
 
-solution = genericLength . filter isFirst $ centuryDays
+solution = length' . filter isFirst $ centuryDays
 
 -- | All the days of the century in question
 centuryDays = takeWhile (<= Date 2000 12 31) .

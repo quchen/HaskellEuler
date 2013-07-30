@@ -13,5 +13,5 @@ module Problem1 (solution) where
 
 solution = (sumFor 3 + sumFor 5 - sumFor 15) `quot` 2
       where nMax = 1000 - 1
-            sumFor n = let nX = nMax `quot` n
-                       in  n * nX * (nX + 1)
+            sumFor n = let numSummands = nMax `quot` n
+                       in  n * numSummands * (numSummands + 1)

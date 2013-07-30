@@ -157,3 +157,6 @@ digitToInt' '7' = 7
 digitToInt' '8' = 8
 digitToInt' '9' = 9
 digitToInt'  _  = error $ "Custom digitToInt': Not a digit"
+
+length' :: (Integral i) => [a] -> i
+length' = fromIntegral . length

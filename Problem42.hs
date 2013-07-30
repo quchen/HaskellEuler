@@ -14,7 +14,7 @@ import Data.Maybe
 import Data.List
 
 
-solution = genericLength triangleWords
+solution = length' triangleWords
 
 triangleNumbers = [n * (n+1) `quot` 2 | n <- [1..]]
 

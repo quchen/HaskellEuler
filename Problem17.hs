@@ -17,7 +17,7 @@ import CommonFunctions
 
 solution = sum' $ map numberLength [1..1000]
 
-numberLength = genericLength . filter isLetter . spellNumber
+numberLength = length' . filter isLetter . spellNumber
 
 spellNumber n
       | n ==   0  = ""

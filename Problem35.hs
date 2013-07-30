@@ -12,7 +12,7 @@ import Data.List
 import Data.Numbers.Primes
 import CommonFunctions
 
-solution = genericLength $ filter isCircularPrime candidates
+solution = length' $ filter isCircularPrime candidates
       where candidates = takeWhile (< 10^6) primes
 
 -- isCircularPrime p = all isPrime rotations

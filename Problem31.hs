@@ -9,7 +9,7 @@
 
 module Problem31 (solution) where
 
-import Data.List (genericLength)
+import CommonFunctions (length')
 import Data.Array
 
 -- Solution inspired by "counting change" from Structure and Interpretation of
@@ -29,7 +29,7 @@ change amount = go amount numCoins
                                             c <- [1..numCoins]]
 
 coins = [1, 2, 5, 10, 20, 50, 100, 200]
-numCoins = genericLength coins
+numCoins = length' coins
 coinsArray = listArray (1, numCoins) coins
 coin n = coinsArray ! n
 
