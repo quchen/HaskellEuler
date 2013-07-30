@@ -1,5 +1,6 @@
 HS = ghc
-HSFLAGS = -O2 --make -i:$(SRC)
+HSFLAGS = -O2 --make $(INCLUDE)
+INCLUDE = -i:$(SRC)
 
 EXENAME = euler
 SRC = src/
@@ -10,6 +11,11 @@ all :
 
 run : all
 	./$(EXENAME) +RTS -N4
+
+wall :
+	$(HS) $(INCLUDE) -Wall -fno-warn-type-defaults $(SRC)Main.hs -o $(EXENAME)
+	make clean
+
 
 prof :
 	$(HS) $(HSFLAGS) -prof -auto-all $(SRC)Main.hs -o $(EXENAME)

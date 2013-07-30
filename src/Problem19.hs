@@ -1,5 +1,3 @@
-{-# LANGUAGE BangPatterns #-}
-
 {-
       Problem 19
             How many Sundays fell on the first of the month during the twentieth

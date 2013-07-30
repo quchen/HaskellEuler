@@ -19,7 +19,7 @@ solution = maximum' . map maxProduct $ horizontal ++ vertical ++ diag1 ++ diag2
             rotateList n xs -- Example: rotateList (-1) [1..4] == [4,1,2,3]
                   | n == 0 = xs
                   | n >  0 = rotateList (n-1) $  tail xs  ++ [head xs]
-                  | n <  0 = rotateList (n+1) $ [last xs] ++  init xs
+                  | n <  0 = rotateList (n+1) $  last xs  :   init xs
             horizontal = grid
             vertical   = transpose horizontal
             diag1      = transpose $ zipWith rotateList [1..]     horizontal

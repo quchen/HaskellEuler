@@ -85,10 +85,18 @@ fibo = 1 : 1 : strict (zipWith (+) fibo (tail fibo))
 nextFib = ((1,1),(1,0))
 
 -- 2*2 matrix product
+matrixProd :: Num t
+           => ((t, t), (t, t))
+           -> ((t, t), (t, t))
+           -> ((t, t), (t, t))
 matrixProd ((!m11,!m12), (!m21,!m22)) ((!n11,!n12), (!n21,!n22)) = r
       where r = ((m11*n11 + m12*n21, m11*n12 + m12*n22),
                  (m21*n11 + m22*n21, m21*n12 + m22*n22))
 -- 2*2 matrix times vector
+matrixTimes :: Num t
+               => ((t, t), (t, t))
+               -> (t, t)
+               -> (t, t)
 matrixTimes ((!m11,!m12), (!m21,!m22)) (a,b) = r
       where r = (a*m11 + b*m12, a*m21 + b*m22)
 
@@ -156,7 +164,7 @@ digitToInt' '6' = 6
 digitToInt' '7' = 7
 digitToInt' '8' = 8
 digitToInt' '9' = 9
-digitToInt'  _  = error $ "Custom digitToInt': Not a digit"
+digitToInt'  _  = error "Custom digitToInt': Not a digit"
 
 length' :: (Integral i) => [a] -> i
 length' = fromIntegral . length

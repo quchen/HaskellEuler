@@ -6,11 +6,9 @@ module Power (
       powerM
       ) where
 
-import Control.Monad (liftM2)
 import Control.Monad.Identity
 
 import Test.QuickCheck
-import Control.Applicative
 
 -- COMMENT OUTDATED: Arguments are now power f n x
 {- | Efficient power algorithm.
@@ -67,8 +65,8 @@ powerM f = g
             h n r x
                   | n == 1    = x `f` r
                   | even n    = x `f` x >>= h (n `quot` 2) r
-                  | otherwise = do square <- (x `f` x)
-                                   rest   <- (r `f` x)
+                  | otherwise = do square <- x `f` x
+                                   rest   <- r `f` x
                                    h (pred n `quot` 2) rest square
 {-# INLINE powerM #-}
 

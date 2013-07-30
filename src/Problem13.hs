@@ -14,7 +14,7 @@ import CommonFunctions
 solution = first10 . sum' $ numbers
 
 first10 n | n < 10^10 = n -- first number with 11 digits is 10^10
-          | otherwise  = first10 $ n `quot` 10
+          | otherwise = first10 $ n `quot` 10
 
 
 

@@ -19,6 +19,6 @@ solution = sum' . take 11 . filter isTruncatable $ candidates
 isTruncatable n = allPrimes truncates
       where n' = explodeInt10 n
             allPrimes = all $ isPrime . implodeInt 10
-            truncates = (middle $ inits n') ++ (middle $ tails n')
+            truncates = middle (inits n') ++ middle (tails n')
             middle = init . tail -- Everything but head and last
                                  -- (since inits xs = [xs ... []])

@@ -24,7 +24,7 @@ change amount = go amount numCoins
             goMemo n c | inRange boundsMemo (n,c) = memo ! (n,c)
                        | otherwise = go n c
             boundsMemo = ((1,1), (amount, numCoins))
-            memo = array boundsMemo $
+            memo = array boundsMemo
                          [((n,c), go n c) | n <- [1..amount],
                                             c <- [1..numCoins]]
 

@@ -33,4 +33,4 @@ toTheFifth '6' = 6^5
 toTheFifth '7' = 7^5
 toTheFifth '8' = 8^5
 toTheFifth '9' = 9^5
-toTheFifth  _  = error $ "Not a digit 'to the fifth'  in problem 30"
+toTheFifth  _  = error "Not a digit 'to the fifth'  in problem 30"

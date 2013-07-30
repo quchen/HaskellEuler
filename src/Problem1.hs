@@ -11,6 +11,7 @@
 -}
 module Problem1 (solution) where
 
+solution :: Integer
 solution = (sumFor 3 + sumFor 5 - sumFor 15) `quot` 2
       where nMax = 1000 - 1
             sumFor n = let numSummands = nMax `quot` n
