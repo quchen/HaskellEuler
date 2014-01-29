@@ -11,34 +11,34 @@
 -}
 module Problem14 (solution) where
 
-import Data.Array
+import qualified Data.Vector as V
+import Data.Ix
 
-solution = fst maxTuple
-      where maxN :: Integer
-            maxN = 10^6-1
+solution = fromIntegral (V.maxIndex collatzLengthTable + 1)
+      where maxN :: Int
+            maxN = 10^6
 
-            -- How many numbers to memoize.
-            -- Too large consumes too much space, too little and memoization
-            -- is useless.
-            memoN :: Integer
-            memoN = maxN
+            -- Vector of the type [(n-1, collatz steps n has to take to reach loop)]
+            -- to memoized previously obtained lengths.
+            collatzLengthTable :: V.Vector Int
+            collatzLengthTable = V.generate maxN gen
+                  where gen n = collatzLength collatzLengthTable (n+1) 0
 
-            -- Vector of the type [(n, collatz steps n has to take to reach loop)],
-            -- intended to memoize already calculated lengths below a million.
-            -- The first element is (1,1), since 1 has to take 1 step to loop.
-            collatzLengthList :: Array Integer Integer
-            collatzLengthList = array (1, memoN) [(n, collatzLength collatzLengthList n 1) | n <- [1..memoN]]
-            -- collatzLengthList = V.generate (maxN+1) (\n -> if n == 0 then (0,-1) else (n, collatzLength collatzLengthList n 1))
+            -- Check whether the Collatz length of number n is memoized
+            isMemoized n = n <= V.length collatzLengthTable
 
-            collatzLength :: Array Integer Integer -> Integer -> Integer -> Integer
-            collatzLength memo n c
-                  | n == 1                                           = 1
-                  | even n && bounds memo `inRange` (n `quot` 2) = c + (memo ! (n `quot` 2))
-                  | odd  n && bounds memo `inRange`  (3 * n + 1) = c + (memo ! (3 * n +  1))
-                  | even n                                           = collatzLength memo (n `quot` 2) (c+1)
-                  | otherwise                                        = collatzLength memo (3*n + 1) (c+1)
+            collatzLength :: V.Vector Int -- ^ Memo table
+                          -> Int -- ^ Current number
+                          -> Int -- ^ Number of steps to count to here
+                          -> Int -- ^ Length of the chain to get to 1
+            collatzLength memo n !count
+                  | n == 1 = count
+                  | even n && isMemoized nHalf   = count + memo !^ nHalf
+                  | odd  n && isMemoized n3plus1 = count + memo !^ n3plus1
+                  | even n    = collatzLength memo nHalf   (count+1)
+                  | otherwise = collatzLength memo n3plus1 (count+1)
+                  where nHalf   = n `quot` 2
+                        n3plus1 = 3*n + 1
 
-            maxTuple = foldl1 maxC . take (fromIntegral maxN) $ assocs collatzLengthList
-                  where maxC a@(_,!a2) x@(_,x2)
-                              | a2 >= x2  = a
-                              | otherwise = x
+            -- Ix-based vector indexing
+            vec !^ i = vec V.! index (1, maxN) i
